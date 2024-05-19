@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../User/FavoriteWord.dart';
 import '../User/UserInformationPage.dart';
 import '../screens/signin_screen.dart';
 
@@ -17,7 +18,7 @@ class _ProfilePageState extends State<ProfilePage> {
     _getUser();
   }
 
-  Future<void> _getUser() async {
+  void _getUser() {
     user = FirebaseAuth.instance.currentUser;
     setState(() {});
   }
@@ -26,66 +27,65 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.purple[300],
-      body: FutureBuilder(
-        future: _getUser(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
-          return ListView(
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.all(20.0),
-                child: Column(
-                  children: <Widget>[
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundImage: NetworkImage(
-                          user?.photoURL ?? 'http://placekitten.com/200/200'
-                      ), // Placeholder image if photoURL is null
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                        user?.displayName ?? 'User Name',
-                        style: TextStyle(color: Colors.white, fontSize: 24)
-                    ),
-                    Text(
-                        user?.email ?? 'user@example.com',
-                        style: TextStyle(color: Colors.white, fontSize: 18)
-                    ),
-                    SizedBox(height: 10),
-                    MaterialButton(
-                      onPressed: () async {
-                        final result = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => UserInformationPage(user: user!)
-                          ),
-                        );
-                        if (result == true) {
-                          _getUser();
-                        }
-                      },
-                      color: Colors.white,
-                      child: Text('Edit Profile'),
-                    ),
-                  ],
+      body: user == null
+          ? Center(child: CircularProgressIndicator())
+          : ListView(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.all(20.0),
+            child: Column(
+              children: <Widget>[
+                CircleAvatar(
+                  radius: 50,
+                  backgroundImage: NetworkImage(
+                      user?.photoURL ?? 'http://placekitten.com/200/200'
+                  ), // Placeholder image if photoURL is null
                 ),
-              ),
-              _buildTile(Icons.settings, 'Settings'),
-              _buildTile(Icons.school, 'Instructor'),
-              _buildTile(Icons.language, 'IELTS/TOEFL'),
-              Container(
-                padding: EdgeInsets.all(20.0),
-                child: ElevatedButton(
-                  onPressed: _showLogoutDialog,
-                  child: Text('Logout'),
-                  style: ElevatedButton.styleFrom(foregroundColor: Colors.purple, backgroundColor: Colors.white),
+                SizedBox(height: 10),
+                Text(
+                    user?.displayName ?? 'User Name',
+                    style: TextStyle(color: Colors.white, fontSize: 24)
                 ),
-              ),
-            ],
-          );
-        },
+                Text(
+                    user?.email ?? 'user@example.com',
+                    style: TextStyle(color: Colors.white, fontSize: 18)
+                ),
+                SizedBox(height: 10),
+                MaterialButton(
+                  onPressed: () async {
+                    final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => UserInformationPage(user: user!)
+                      ),
+                    );
+                    if (result == true) {
+                      _getUser();
+                    }
+                  },
+                  color: Colors.white,
+                  child: Text('Edit Profile'),
+                ),
+              ],
+            ),
+          ),
+          _buildTile(Icons.settings, 'Settings', () {}),
+          _buildTile(Icons.school, 'Instructor', () {}),
+          _buildTile(Icons.language, 'Favorite Words', () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => FavoriteWord()),
+            );
+          }),
+          Container(
+            padding: EdgeInsets.all(20.0),
+            child: ElevatedButton(
+              onPressed: _showLogoutDialog,
+              child: Text('Logout'),
+              style: ElevatedButton.styleFrom(foregroundColor: Colors.purple, backgroundColor: Colors.white),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -120,12 +120,12 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  ListTile _buildTile(IconData icon, String title) {
+  ListTile _buildTile(IconData icon, String title, VoidCallback onTap) {
     return ListTile(
       leading: Icon(icon, color: Colors.white),
       title: Text(title, style: TextStyle(color: Colors.white)),
       trailing: Icon(Icons.arrow_forward_ios, color: Colors.white),
-      onTap: () {},
+      onTap: onTap,
     );
   }
 }
