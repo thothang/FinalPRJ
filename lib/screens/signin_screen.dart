@@ -17,11 +17,12 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   final _passwordTextController = TextEditingController();
   final _emailTextController = TextEditingController();
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
 
   Future<void> _signIn(BuildContext context) async {
     try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailTextController.text,
         password: _passwordTextController.text,
       )

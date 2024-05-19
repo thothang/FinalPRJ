@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../User/UserInformationPage.dart';
 import '../screens/signin_screen.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -54,7 +55,19 @@ class _ProfilePageState extends State<ProfilePage> {
           _buildTile(Icons.settings, 'Settings'),
           _buildTile(Icons.school, 'Instructor'),
           _buildTile(Icons.language, 'IELTS/TOEFL'),
-          _buildTile(Icons.info_outline, 'Information'),
+
+          ListTile(
+            leading: Icon(Icons.info_outline, color: Colors.white),
+            title: Text('Information', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UserInformationPage(userEmail: user?.email),
+                ),
+              );
+            },
+          ),
           Container(
             padding: EdgeInsets.all(20.0),
             child: ElevatedButton(
