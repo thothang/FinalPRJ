@@ -205,22 +205,6 @@ Row signUpOption(BuildContext context) {
         ),
       ),
       const SizedBox(width: 16),
-      GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ChangePasswordScreen()),
-          );
-        },
-        child: const Text(
-          "Change Password",
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            decoration: TextDecoration.underline,
-          ),
-        ),
-      ),
     ],
   );
 }

@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../screens/change_password_screen.dart';
+
 class UserInformationPage extends StatefulWidget {
   final User user;
 
@@ -95,6 +97,23 @@ class _UserInformationPageState extends State<UserInformationPage> {
                           }
                         },
                         child: Text('Update'),
+                      ),
+                      SizedBox(height: 20),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ChangePasswordScreen()),
+                          );
+                        },
+                        child: const Text(
+                          "Change Password",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
                       ),
                     ],
                   ),
